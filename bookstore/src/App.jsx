@@ -1,8 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react" 
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+import Header from "./components/Header"
+import Home from "./components/Home"
+import Publishers from "./components/Publishers"
+import Books from "./components/Books"
+import BookForm from "./components/BookForm"
+import Footer from "./components/Footer"
 
-export default () => (
-  <>
-    <h1>Welcome to React Vite Micro App!</h1>
-    <p>Hard to get more minimal than this React app.</p>
-  </>
-);
+const App = () => {
+  
+  return (
+  <BrowserRouter>
+    <Header />
+    <main>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/publishers" element={<Publishers/>} />
+          <Route path="/books" element={<Books />} />
+          <Route path="/books/new/:name" element={<BookForm />}/>
+        </Routes>
+    </main>
+    <Footer />
+  </BrowserRouter>
+)
+}
+
+export default App
+
