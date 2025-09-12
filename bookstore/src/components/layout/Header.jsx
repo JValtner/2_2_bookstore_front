@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import "../styles/style.scss"
+import "../../styles/style.scss"
 
 const Header = () => {
   return (
@@ -9,7 +9,7 @@ const Header = () => {
         <Link to="/">Home</Link>
         <Link to="/publishers">Publishers</Link>
         <Link to="/books">Books</Link>
-        <Link to="/books/new/:name">Create Book</Link>
+        <Link to="/books/new">Create New Book</Link>
       </div>
     </header>
   )
