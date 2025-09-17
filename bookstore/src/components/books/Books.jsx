@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAllBooks, deleteBook } from "../../service/service";
+import { getAllBooks, deleteBook } from "../../service/books.service";
 import BookDisplay from "./BookDisplay";
 import { useNavigate, useLocation } from "react-router-dom";
 import Spinner from "../layout/Spiner";

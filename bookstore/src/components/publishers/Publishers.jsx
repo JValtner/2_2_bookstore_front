@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { getAllPublishers } from "../../service/service"
+import { getAllPublishers } from "../../service/publishers.service"
 import Spinner from "../layout/Spiner"
 import "../../styles/style.scss"
 

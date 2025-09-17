@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getBookById, createBook, updateBook, getAllAuthors, getAllPublishers } from "../../service/service";
+import { getBookById, createBook, updateBook } from "../../service/books.service";
+import { getAllAuthors} from "../../service/authors.service";
+import { getAllPublishers } from "../../service/publishers.service";
 import BlankForm from "./BlankForm";
 import { useForm } from "react-hook-form";
 import "../../styles/style.scss";
@@ -26,8 +28,8 @@ const BookForm = () => {
         setValue('bookPageCount', book.pageCount);
         setValue('bookPublishDate', new Date(book.publishedDate).toISOString().split('T')[0]);
         setValue('bookIsbn', book.isbn);
-        setValue('bookAuthor', book.author?.id?.toString());
-        setValue('bookPublisher', book.publisher?.id?.toString());
+        setValue("bookAuthor", book.author?.id ?? "");
+        setValue("bookPublisher", book.publisher?.id ?? "");
       }
     };
     fetchMeta();
@@ -41,9 +43,7 @@ const BookForm = () => {
       publishedDate: data.bookPublishDate,
       isbn: data.bookIsbn,
       authorId: Number(data.bookAuthor),
-      author: authors.find(a => a.id === Number(data.bookAuthor)) || null,
       publisherId: Number(data.bookPublisher),
-      publisher: publishers.find(p => p.id === Number(data.bookPublisher)) || null,
     };
 
     try {
