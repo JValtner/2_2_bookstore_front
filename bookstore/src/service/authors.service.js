@@ -5,6 +5,14 @@ export async function getAllAuthors() {
   const response = await AxiosConfig.get(AUTHORS_RESOURCE);
   return response.data;
 }
+export async function getAllAuthorsPaged(page, pageSize) {
+  try {
+    const response = await AxiosConfig.get(`${AUTHORS_RESOURCE}/paging?page=${page}&pageSize=${pageSize}`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to fetch authors page');
+  }
+}
 
 export async function getAuthorById(id) {
   const response = await AxiosConfig.get(`${AUTHORS_RESOURCE}/${id}`);

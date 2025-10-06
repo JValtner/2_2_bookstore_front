@@ -4,6 +4,7 @@ import Header from "./components/layout/Header"
 import Footer from "./components/layout/Footer"
 import Home from "./components/home/Home"
 import Publishers from "./components/publishers/Publishers"
+import Authors from "./components/authors/authors"
 import Books from "./components/books/Books"
 import BookForm from "./components/form/BookForm"
 import "./styles/style.scss"
@@ -17,6 +18,7 @@ const App = () => (
           <Route path="/" element={<Home />} />
           <Route path="/publishers" element={<Publishers />} />
           <Route path="/books" element={<Books />} />
+          <Route path="/authors" element={<Authors />} />
           <Route path="/books/new" element={<BookForm />} />
           <Route path="/books/edit/:id" element={<BookForm />} />
         </Routes>

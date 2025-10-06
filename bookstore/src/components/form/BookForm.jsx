@@ -42,8 +42,8 @@ const BookForm = () => {
       pageCount: Number(data.bookPageCount),
       publishedDate: data.bookPublishDate,
       isbn: data.bookIsbn,
-      authorId: Number(data.bookAuthor),
-      publisherId: Number(data.bookPublisher),
+      authorId: String(data.bookAuthor),
+      publisherId:String(data.bookPublisher),
     };
 
     try {

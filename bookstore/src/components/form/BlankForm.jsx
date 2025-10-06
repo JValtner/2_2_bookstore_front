@@ -52,7 +52,7 @@ const BlankForm = ({ register, errors, reset, handleSubmit, onSubmit, authors, p
         <select {...register('bookAuthor', { required: 'Izaberite autora' })}>
           <option value="">-- Izaberite autora --</option>
           {authors.map(author => (
-            <option key={author.id} value={author.id}>{author.fullName}</option>
+            <option key={author.id} value={String(author.id)}>{author.fullName}</option>
           ))}
         </select>
         {errors.bookAuthor && <p style={{ color: 'red' }}>{errors.bookAuthor.message}</p>}

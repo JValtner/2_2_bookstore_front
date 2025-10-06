@@ -73,7 +73,6 @@ const Books = () => {
           <thead>
             <tr>
               <th>Naslov</th>
-              <th>Strane</th>
               <th>Datum</th>
               <th>ISBN</th>
               <th>Autor</th>

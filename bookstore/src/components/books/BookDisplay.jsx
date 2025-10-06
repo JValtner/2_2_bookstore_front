@@ -24,11 +24,10 @@ const BookDisplay = ({ book, onDelete, onEdit }) => {
   return (
     <tr>
       <td data-label="Naslov">{book.title}</td>
-      <td data-label="Strane">{book.pageCount}</td>
       <td data-label="Datum">{new Date(book.publishedDate).toLocaleDateString()}</td>
       <td data-label="ISBN">{book.isbn}</td>
-      <td data-label="Autor">{book.author?.fullName}</td>
-      <td data-label="Izdavač">{book.publisher?.name}</td>
+      <td data-label="Autor">{book.authorName}</td>
+      <td data-label="Izdavač">{book.publisherName}</td>
       <td data-label="Akcije" className="actions-cell">
         <div className="actions">
           <button className="btn btn-edit" onClick={() => handleEdit(book.id)} disabled={loadingEdit}>
