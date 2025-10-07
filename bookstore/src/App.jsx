@@ -4,7 +4,6 @@ import Header from "./components/layout/Header"
 import Footer from "./components/layout/Footer"
 import Home from "./components/home/Home"
 import Publishers from "./components/publishers/Publishers"
-import SortPublishers from "./components/publishers/SortPublishers"
 import Authors from "./components/authors/authors"
 import Books from "./components/books/Books"
 import BookForm from "./components/form/BookForm"
@@ -18,7 +17,6 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/publishers" element={<Publishers />} />
-          <Route path="/publishers/sort" element={<SortPublishers />} />
           <Route path="/books" element={<Books />} />
           <Route path="/authors" element={<Authors />} />
           <Route path="/books/new" element={<BookForm />} />
