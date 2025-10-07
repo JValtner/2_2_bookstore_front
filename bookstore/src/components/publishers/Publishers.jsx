@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { fetchSortedPublishers, fetchSortTypes } from "../../service/publishers.service"
+import { getSortedPublishers, getSortTypes } from "../../service/publishers.service"
 import Spinner from "../layout/Spiner"
 import "../../styles/style.scss"
 
@@ -9,13 +9,13 @@ const Publishers = () => {
     const [errorMsg, setErrorMsg] = useState("")
 
     const [sortTypes, setSortTypes] = useState([])
-    const [chosenType, setChosenType] = useState("")
+    const [chosenType, setChosenType] = useState(0);
 
     useEffect(() => {
         const getPublishers = async () => {
             try {
                 setLoading(true)
-                const fetchedSortedPublishers = await fetchSortedPublishers(chosenType)
+                const fetchedSortedPublishers = await getSortedPublishers(chosenType)
                 setPublishers(fetchedSortedPublishers)
             } catch (error) {
                 setErrorMsg(`Greška pri učitavanju: ${error.message}`)
@@ -31,7 +31,7 @@ const Publishers = () => {
     useEffect(() => {
         const loadSortTypes = async () => {
             try {
-                const data = await fetchSortTypes()
+                const data = await getSortTypes()
                 setSortTypes(data)
             } catch (err) {
                 console.error("Greška pri učitavanju tipova sortiranja:", err.message)

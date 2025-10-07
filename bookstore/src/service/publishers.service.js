@@ -27,7 +27,7 @@ export async function deletePublisher(id) {
   const response = await AxiosConfig.delete(`${PUBLISHERS_RESOURCE }/${id}`);
   return response.data;
 }
-export const fetchSortedPublishers = async (sortType) => {
+export const getSortedPublishers = async (sortType) => {
     var response = null;
     if (sortType) {
       response = await AxiosConfig.get(`${PUBLISHERS_RESOURCE}/sort?sortType=` + sortType);
@@ -37,7 +37,7 @@ export const fetchSortedPublishers = async (sortType) => {
     return response.data;
 };
 
-export const fetchSortTypes = async () => {
+export const getSortTypes = async () => {
     try {
       const response = await AxiosConfig.get(`${PUBLISHERS_RESOURCE}/sortTypes`);
         return response.data.result;

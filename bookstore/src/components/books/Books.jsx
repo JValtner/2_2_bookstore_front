@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAllBooks, deleteBook } from "../../service/books.service";
+import { getSortedBooks, getSortTypes, deleteBook } from "../../service/books.service";
 import BookDisplay from "./BookDisplay";
 import { useNavigate, useLocation } from "react-router-dom";
 import Spinner from "../layout/Spiner";
@@ -10,43 +10,55 @@ const Books = () => {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [feedbackMsg, setFeedbackMsg] = useState("");
+  const [sortTypes, setSortTypes] = useState([]);
+  const [chosenType, setChosenType] = useState("");
+  
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Fetch books on mount
+  // 🔹 Load sort types once
   useEffect(() => {
-    const getBooks = async () => {
+    const loadSortTypes = async () => {
       try {
-        setLoading(true);
-        const fetchedBooks = await getAllBooks();
-        setBooks(fetchedBooks);
-      } catch (error) {
-        setErrorMsg(`Greška pri učitavanju: ${error.message}`);
-      } finally {
-        setTimeout(() => setLoading(false), 1000);
+        const data = await getSortTypes();
+        setSortTypes(data);
+      } catch (err) {
+        console.error("Greška pri učitavanju tipova sortiranja:", err.message);
+        setErrorMsg("Greška pri učitavanju tipova sortiranja.");
       }
     };
-    getBooks();
+    loadSortTypes();
   }, []);
 
-  // Handle feedback message from navigation
+  // 🔹 Load books when chosenType changes or after navigation
   useEffect(() => {
-    if (location.state?.message) {
-      setFeedbackMsg(location.state.message);
-      setTimeout(() => setFeedbackMsg(""), 3000);
-    }
-  }, [location.state]);
+    const loadBooks = async () => {
+      if (location.state?.message) {
+        setFeedbackMsg(location.state.message);
+        setTimeout(() => setFeedbackMsg(""), 3000);
+      }
 
-  // Edit handler
-  const handleEdit = (id) => {
-    navigate(`/books/edit/${id}`);
-  };
+      try {
+        setLoading(true);
+        const fetchedBooks = await getSortedBooks(chosenType);
+        setBooks(fetchedBooks);
+      } catch (error) {
+        setErrorMsg(`Greška pri učitavanju knjiga: ${error.message}`);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // Delete handler
+    loadBooks();
+  }, [chosenType, location.state]);
+
+  // 🔹 Handlers
+  const handleEdit = (id) => navigate(`/books/edit/${id}`);
+
   const handleDelete = async (id) => {
     try {
       await deleteBook(id);
-      setBooks(prev => prev.filter(book => book.id !== id));
+      setBooks((prev) => prev.filter((book) => book.id !== id));
       setFeedbackMsg("Knjiga uspešno obrisana.");
       setTimeout(() => setFeedbackMsg(""), 3000);
     } catch (error) {
@@ -54,56 +66,75 @@ const Books = () => {
     }
   };
 
-  return (
-    <>
-      {loading && <Spinner />}
+  // 🔹 Sorting control
+  const displaySortForm = () => (
+    <div className="controls">
+      <label>
+        Sortiraj po:
+        <select
+          className="select"
+          value={chosenType}
+          onChange={(e) => setChosenType(e.target.value)}
+        >
+          <option value="">-- Odaberi --</option>
+          {sortTypes.map((stype) => (
+            <option key={stype.key ?? stype.id} value={stype.key ?? stype.id}>
+              {stype.name ?? stype.Name}
+            </option>
+          ))}
+        </select>
+      </label>
+    </div>
+  );
 
+  return (
+    <div className="page books">
+      {loading && <Spinner />}
+      
       {!loading && feedbackMsg && (
         <p className="message-box success">{feedbackMsg}</p>
       )}
-
       {!loading && errorMsg && (
         <p className="message-box error">{errorMsg}</p>
       )}
 
+      <h1>BOOKS</h1>
+      {displaySortForm()}
 
-      <div className="page books">
-        <h1>BOOKS</h1>
-        <table className="table books">
-          <thead>
-            <tr>
-              <th>Naslov</th>
-              <th>Datum</th>
-              <th>ISBN</th>
-              <th>Autor</th>
-              <th>Izdavač</th>
-              <th>Akcije</th>
-            </tr>
-          </thead>
-          {!loading && !errorMsg && (
-            <tbody>
-              {books.length > 0 ? (
-                books.map(book => (
-                  <BookDisplay
-                    key={book.id}
-                    book={book}
-                    onDelete={handleDelete}
-                    onEdit={handleEdit}
-                  />
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="7" style={{ textAlign: "center" }}>
-                    Nema dostupnih knjiga
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          )}
-        </table>
-      </div>
+      <table className="table books">
+        <thead>
+          <tr>
+            <th>Naslov</th>
+            <th>Datum</th>
+            <th>ISBN</th>
+            <th>Autor</th>
+            <th>Izdavač</th>
+            <th>Akcije</th>
+          </tr>
+        </thead>
 
-    </>
+        {!loading && !errorMsg && (
+          <tbody>
+            {books.length > 0 ? (
+              books.map((book) => (
+                <BookDisplay
+                  key={book.id}
+                  book={book}
+                  onDelete={handleDelete}
+                  onEdit={handleEdit}
+                />
+              ))
+            ) : (
+              <tr>
+                <td colSpan="7" style={{ textAlign: "center" }}>
+                  Nema dostupnih knjiga
+                </td>
+              </tr>
+            )}
+          </tbody>
+        )}
+      </table>
+    </div>
   );
 };
 

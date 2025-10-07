@@ -27,3 +27,21 @@ export async function deleteBook(id) {
   const response = await AxiosConfig.delete(`${BOOKS_RESOURCE}/${id}`);
   return response.data;
 }
+export const getSortedBooks = async (sortType) => {
+    var response = null;
+    if (sortType) {
+      response = await AxiosConfig.get(`${BOOKS_RESOURCE}/sort?sortType=` + sortType);
+    } else {
+      response = await AxiosConfig.get(`${BOOKS_RESOURCE}/sort`);
+    }
+    return response.data;
+};
+
+export const getSortTypes = async () => {
+    try {
+      const response = await AxiosConfig.get(`${BOOKS_RESOURCE}/sortTypes`);
+        return response.data.result;
+    } catch (error) {
+        throw new Error('Failed to fetch sort types');
+    }
+};
