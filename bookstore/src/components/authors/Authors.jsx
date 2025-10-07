@@ -13,7 +13,7 @@ const Authors = () => {
   const [totalItems, setTotalItems] = useState(0)
   const [hasNextPage, setHasNextPage] = useState(false)
   const [hasPreviousPage, setHasPreviousPage] = useState(false)
-  const [pageCount, setPageCount] =useState(0)
+  const [pageCount, setPageCount] = useState(0)
 
   useEffect(() => {
     const getAuthorsPage = async () => {
@@ -56,16 +56,29 @@ const Authors = () => {
   )
   const renderPagination = () => (
     <tfoot>
-        <tr>
-            <td colSpan={3}>
-                <div className="pagination">
-                    <button onClick={() => setPage((p) => p - 1)}disabled={!hasPreviousPage}> ← Prethodna </button>
-                    <span>Stranica {page + 1} / {pageCount}</span>
-                    <button onClick={() => setPage((p) => p + 1)} disabled={!hasNextPage}>Sledeća →</button>
-                </div>
-            </td>
-        </tr>
+      <tr>
+        <td colSpan={3}>
+          <div className="pagination">
+            <button onClick={() => setPage((p) => p - 1)} disabled={!hasPreviousPage}> ← Prethodna </button>
+            <span>Stranica {page + 1} / {pageCount}</span>
+            <button onClick={() => setPage((p) => p + 1)} disabled={!hasNextPage}>Sledeća →</button>
+          </div>
+        </td>
+      </tr>
     </tfoot>
+  )
+
+  const displayPageSizeForm = () => (
+    <div className="controls">
+      <label>
+        Authors per page:
+        <input
+          type="number"
+          min="1"
+          value={pageSize}
+          onChange={(e) => setPageSize(Number(e.target.value))} />
+      </label>
+    </div>
   )
 
   return (
@@ -78,35 +91,25 @@ const Authors = () => {
 
       {!loading && !errorMsg && (
         <div className="page authors">
-            <h1>Autori</h1>
+          <h1>Autori</h1>
 
-            <div className="controls">
-                <label>
-                Stavki po stranici:
-                <input
-                    type="number"
-                    min="1"
-                    value={pageSize}
-                    onChange={(e) => setPageSize(Number(e.target.value))}
-                />
-                </label>
-            </div>
+          {displayPageSizeForm()}
 
-            <table className="table">
-                <thead>
-                <tr>
-                    <th>Ime</th>
-                    <th>Biografija</th>
-                    <th>Datum rođenja</th>
-                </tr>
-                </thead>
-                <tbody>
-                    { renderAuthors()}
-                </tbody>
-                    {renderPagination()}
-            </table>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Ime</th>
+                <th>Biografija</th>
+                <th>Datum rođenja</th>
+              </tr>
+            </thead>
+            <tbody>
+              {renderAuthors()}
+            </tbody>
+            {renderPagination()}
+          </table>
 
-          
+
         </div>
       )}
     </>
