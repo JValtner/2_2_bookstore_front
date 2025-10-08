@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { getSortedBooks, getSortTypes, deleteBook } from "../../service/books.service";
+import { getSortedFilteredPagedBooks, getSortTypes, deleteBook } from "../../service/books.service";
+import { getAllAuthors } from "../../service/authors.service";
 import BookDisplay from "./BookDisplay";
+import Pagination from "../Pagination";
+import BookFilterSection from "../BookFilterSection";
+import SortForm from "../SortForm";
 import { useNavigate, useLocation } from "react-router-dom";
 import Spinner from "../layout/Spiner";
 import "../../styles/style.scss";
@@ -12,16 +16,34 @@ const Books = () => {
   const [feedbackMsg, setFeedbackMsg] = useState("");
   const [sortTypes, setSortTypes] = useState([]);
   const [chosenType, setChosenType] = useState("");
-  
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
+  const [totalItems, setTotalItems] = useState(0);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [hasPreviousPage, setHasPreviousPage] = useState(false);
+  const [pageCount, setPageCount] = useState(0);
+  const [authors, setAuthors] = useState([]);
+  const [filter, setFilter] = useState({
+    Title: null,
+    PublishedDateFrom: null,
+    PublishedDateTo: null,
+    AuthorFullName: null,
+    AuthorId: null,
+    AuthorDateOfBirthFrom: null,
+    AuthorDateOfBirthTo: null,
+  });
+
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 🔹 Load sort types once
+  // Load sort types and authors
   useEffect(() => {
     const loadSortTypes = async () => {
       try {
-        const data = await getSortTypes();
-        setSortTypes(data);
+        const authorsData = await getAllAuthors();
+        const sortData = await getSortTypes();
+        setSortTypes(sortData);
+        setAuthors(authorsData);
       } catch (err) {
         console.error("Greška pri učitavanju tipova sortiranja:", err.message);
         setErrorMsg("Greška pri učitavanju tipova sortiranja.");
@@ -30,7 +52,7 @@ const Books = () => {
     loadSortTypes();
   }, []);
 
-  // 🔹 Load books when chosenType changes or after navigation
+  // Load books whenever filter, sort, page, or pageSize changes
   useEffect(() => {
     const loadBooks = async () => {
       if (location.state?.message) {
@@ -40,8 +62,12 @@ const Books = () => {
 
       try {
         setLoading(true);
-        const fetchedBooks = await getSortedBooks(chosenType);
-        setBooks(fetchedBooks);
+        const fetchedBooks = await getSortedFilteredPagedBooks(filter, page + 1, pageSize, chosenType);
+        setBooks(fetchedBooks.items || []);
+        setTotalItems(fetchedBooks.count || fetchedBooks.length);
+        setHasNextPage(fetchedBooks.hasNextPage || false);
+        setHasPreviousPage(fetchedBooks.hasPreviousPage || false);
+        setPageCount(fetchedBooks.totalPages || 1);
       } catch (error) {
         setErrorMsg(`Greška pri učitavanju knjiga: ${error.message}`);
       } finally {
@@ -50,9 +76,9 @@ const Books = () => {
     };
 
     loadBooks();
-  }, [chosenType, location.state]);
+  }, [filter, page, pageSize, chosenType, location.state]);
 
-  // 🔹 Handlers
+  // Handlers
   const handleEdit = (id) => navigate(`/books/edit/${id}`);
 
   const handleDelete = async (id) => {
@@ -66,41 +92,25 @@ const Books = () => {
     }
   };
 
-  // 🔹 Sorting control
-  const displaySortForm = () => (
-    <div className="controls">
-      <label>
-        Sortiraj po:
-        <select
-          className="select"
-          value={chosenType}
-          onChange={(e) => setChosenType(e.target.value)}
-        >
-          <option value="">-- Odaberi --</option>
-          {sortTypes.map((stype) => (
-            <option key={stype.key ?? stype.id} value={stype.key ?? stype.id}>
-              {stype.name ?? stype.Name}
-            </option>
-          ))}
-        </select>
-      </label>
-    </div>
-  );
-
   return (
     <div className="page books">
       {loading && <Spinner />}
-      
-      {!loading && feedbackMsg && (
-        <p className="message-box success">{feedbackMsg}</p>
-      )}
-      {!loading && errorMsg && (
-        <p className="message-box error">{errorMsg}</p>
-      )}
+      {!loading && feedbackMsg && <p className="message-box success">{feedbackMsg}</p>}
+      {!loading && errorMsg && <p className="message-box error">{errorMsg}</p>}
 
       <h1>BOOKS</h1>
-      {displaySortForm()}
 
+      {/* Filter Section */}
+      <BookFilterSection filter={filter} setFilter={setFilter} authors={authors} />
+
+      {/* Sort Form */}
+      <SortForm
+        sortTypes={sortTypes}
+        chosenType={chosenType}
+        onSortChange={(value) => { setChosenType(value); setPage(0); }}
+      />
+
+      {/* Books Table */}
       <table className="table books">
         <thead>
           <tr>
@@ -112,7 +122,6 @@ const Books = () => {
             <th>Akcije</th>
           </tr>
         </thead>
-
         {!loading && !errorMsg && (
           <tbody>
             {books.length > 0 ? (
@@ -126,13 +135,22 @@ const Books = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="7" style={{ textAlign: "center" }}>
-                  Nema dostupnih knjiga
-                </td>
+                <td colSpan="7" style={{ textAlign: "center" }}>Nema dostupnih knjiga</td>
               </tr>
             )}
           </tbody>
         )}
+
+        <Pagination
+          page={page}
+          pageCount={pageCount}
+          totalCount={totalItems}
+          hasPreviousPage={hasPreviousPage}
+          hasNextPage={hasNextPage}
+          pageSize={pageSize}
+          onPageChange={setPage}
+          onPageSizeChange={setPageSize}
+        />
       </table>
     </div>
   );

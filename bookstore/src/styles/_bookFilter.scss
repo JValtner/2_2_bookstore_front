@@ -1,0 +1,56 @@
+.book-filter-section {
+  background-color: #f7f7f7; /* light grey background */
+  padding: 1rem;
+  border-radius: 6px;
+  max-width: 900px;
+  margin: 1rem auto;
+  font-family: Arial, sans-serif;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.filter-row label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  color: #333;
+  flex: 1; /* makes labels take equal space */
+}
+
+.filter-row input[type="text"],
+.filter-row input[type="date"],
+.filter-row select {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.filter-row input[type="text"]:focus,
+.filter-row input[type="date"]:focus,
+.filter-row select:focus {
+  border-color: #999;
+  outline: none;
+}
+
+.filter-row button {
+  background-color: #ccc;
+  color: #333;
+  border: 1px solid #999;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.filter-row button:hover {
+  background-color: #aaa;
+}

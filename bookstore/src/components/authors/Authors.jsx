@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { getAllAuthorsPaged } from "../../service/authors.service"
 import Spinner from "../layout/Spiner"
+import Pagination from "../Pagination"
 import "../../styles/style.scss"
 
 const Authors = () => {
@@ -54,32 +55,6 @@ const Authors = () => {
       </tr>
     )
   )
-  const renderPagination = () => (
-    <tfoot>
-      <tr>
-        <td colSpan={3}>
-          <div className="pagination">
-            <button onClick={() => setPage((p) => p - 1)} disabled={!hasPreviousPage}> ← Prethodna </button>
-            <span>Stranica {page + 1} / {pageCount}</span>
-            <button onClick={() => setPage((p) => p + 1)} disabled={!hasNextPage}>Sledeća →</button>
-          </div>
-        </td>
-      </tr>
-    </tfoot>
-  )
-
-  const displayPageSizeForm = () => (
-    <div className="controls">
-      <label>
-        Authors per page:
-        <input
-          type="number"
-          min="1"
-          value={pageSize}
-          onChange={(e) => setPageSize(Number(e.target.value))} />
-      </label>
-    </div>
-  )
 
   return (
     <>
@@ -93,8 +68,6 @@ const Authors = () => {
         <div className="page authors">
           <h1>Autori</h1>
 
-          {displayPageSizeForm()}
-
           <table className="table">
             <thead>
               <tr>
@@ -106,10 +79,16 @@ const Authors = () => {
             <tbody>
               {renderAuthors()}
             </tbody>
-            {renderPagination()}
+            <Pagination
+              page={page}
+              pageCount={pageCount}
+              hasPreviousPage={hasPreviousPage}
+              hasNextPage={hasNextPage}
+              pageSize={pageSize}
+              onPageChange={setPage}
+              onPageSizeChange={setPageSize}
+            />
           </table>
-
-
         </div>
       )}
     </>
