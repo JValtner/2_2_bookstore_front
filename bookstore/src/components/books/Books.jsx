@@ -8,8 +8,10 @@ import SortForm from "../SortForm";
 import { useNavigate, useLocation } from "react-router-dom";
 import Spinner from "../layout/Spiner";
 import "../../styles/style.scss";
+import { useUser } from "../../context/contextUser";
 
 const Books = () => {
+  const { user, roles } = useUser();
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -119,7 +121,10 @@ const Books = () => {
             <th>ISBN</th>
             <th>Autor</th>
             <th>Izdavač</th>
-            <th>Akcije</th>
+            {(user && roles.includes("Editor")) && (
+              <th>Akcije</th>
+            )}
+
           </tr>
         </thead>
         {!loading && !errorMsg && (

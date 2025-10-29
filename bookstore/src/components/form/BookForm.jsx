@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getBookById, createBook, updateBook } from "../../service/books.service";
-import { getAllAuthors} from "../../service/authors.service";
+import { getAllAuthors } from "../../service/authors.service";
 import { getAllPublishers } from "../../service/publishers.service";
 import BlankForm from "./BlankForm";
 import { useForm } from "react-hook-form";
@@ -43,7 +43,7 @@ const BookForm = () => {
       publishedDate: data.bookPublishDate,
       isbn: data.bookIsbn,
       authorId: String(data.bookAuthor),
-      publisherId:String(data.bookPublisher),
+      publisherId: String(data.bookPublisher),
     };
 
     try {

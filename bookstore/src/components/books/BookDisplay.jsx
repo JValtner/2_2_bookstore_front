@@ -1,7 +1,9 @@
 import React, { useState } from "react"
 import "../../styles/style.scss"
+import { useUser } from "../../context/contextUser";
 
 const BookDisplay = ({ book, onDelete, onEdit }) => {
+  const { user, roles } = useUser();
   const [loadingEdit, setLoadingEdit] = useState(false)
   const [loadingDelete, setLoadingDelete] = useState(false)
 
@@ -28,16 +30,19 @@ const BookDisplay = ({ book, onDelete, onEdit }) => {
       <td data-label="ISBN">{book.isbn}</td>
       <td data-label="Autor">{book.authorName}</td>
       <td data-label="Izdavač">{book.publisherName}</td>
-      <td data-label="Akcije" className="actions-cell">
-        <div className="actions">
-          <button className="btn btn-edit" onClick={() => handleEdit(book.id)} disabled={loadingEdit}>
-            {loadingEdit ? <span className="button-spinner"></span> : "Edit"}
-          </button>
-          <button className="btn btn-delete" onClick={() => handleDelete(book.id)} disabled={loadingDelete}>
-            {loadingDelete ? <span className="button-spinner"></span> : "Delete"}
-          </button>
-        </div>
-      </td>
+      {(user && roles.includes("Editor")) && (
+        <td data-label="Akcije" className="actions-cell">
+          <div className="actions">
+            <button className="btn btn-edit" onClick={() => handleEdit(book.id)} disabled={loadingEdit}>
+              {loadingEdit ? <span className="button-spinner"></span> : "Edit"}
+            </button>
+            <button className="btn btn-delete" onClick={() => handleDelete(book.id)} disabled={loadingDelete}>
+              {loadingDelete ? <span className="button-spinner"></span> : "Delete"}
+            </button>
+          </div>
+        </td>
+      )}
+
     </tr>
   )
 }
