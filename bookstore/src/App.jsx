@@ -9,6 +9,8 @@ import Books from "./components/books/Books"
 import BookForm from "./components/form/BookForm"
 import Login from "./components/users/login"
 import Register from "./components/users/register"
+import GoogleCallback from "./components/users/googleCallback"
+import Profile from "./components/users/profile"
 import "./styles/style.scss"
 
 const App = () => (
@@ -25,6 +27,9 @@ const App = () => (
           <Route path="/books/edit/:id" element={<BookForm />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/google-callback" element={<GoogleCallback />} />
+
         </Routes>
       </main>
       <Footer />

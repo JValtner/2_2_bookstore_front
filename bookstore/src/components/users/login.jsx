@@ -13,6 +13,12 @@ export default function Login() {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  const handleGoogleLogin = () => {
+  window.open(
+    "http://localhost:8351/api/Auth/google-login", 
+    "width=500,height=600"
+  );
+};
   const onSubmit = async (data) => {
     try {
       await login({
@@ -49,6 +55,9 @@ export default function Login() {
         />
         {errors.password && <p className="error">{errors.password.message}</p>}
       </label>
+      <button onClick={handleGoogleLogin}>
+        Login with Google
+      </button>
 
       <button type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Signing in…" : "Sign in"}
