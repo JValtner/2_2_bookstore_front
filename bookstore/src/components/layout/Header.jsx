@@ -24,6 +24,8 @@ const Header = () => {
           <Link to="/books/new">Create New Book</Link>
         )}
 
+        <Link to="/comics/volumes-search">Volumes Search</Link>
+        
         {user ? (
           <>
             <Link to="/profile">Profile</Link>

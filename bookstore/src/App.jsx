@@ -11,6 +11,8 @@ import Login from "./components/users/login"
 import Register from "./components/users/register"
 import GoogleCallback from "./components/users/googleCallback"
 import Profile from "./components/users/profile"
+import VolumesSearch from "./components/comics/VolumesSearch"
+import IssuesSearch from "./components/comics/IssuesSearch"
 import "./styles/style.scss"
 
 const App = () => (
@@ -29,6 +31,8 @@ const App = () => (
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/google-callback" element={<GoogleCallback />} />
+          <Route path="/comics/volumes-search" element={<VolumesSearch />} />
+          <Route path="/comics/issues-search" element={<IssuesSearch />} />
 
         </Routes>
       </main>
