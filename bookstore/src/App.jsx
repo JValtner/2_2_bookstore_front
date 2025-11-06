@@ -13,6 +13,7 @@ import GoogleCallback from "./components/users/googleCallback"
 import Profile from "./components/users/profile"
 import VolumesSearch from "./components/comics/VolumesSearch"
 import IssuesSearch from "./components/comics/IssuesSearch"
+import LocalIssueForm from "./components/comics/LocalIssueForm"
 import "./styles/style.scss"
 
 const App = () => (
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/google-callback" element={<GoogleCallback />} />
           <Route path="/comics/volumes-search" element={<VolumesSearch />} />
           <Route path="/comics/issues-search" element={<IssuesSearch />} />
+          <Route path="/comics/local-issue-form" element={<LocalIssueForm />} />
 
         </Routes>
       </main>

@@ -2,6 +2,7 @@ import AxiosConfig from "../config/axios.config";
 
 const VOLUMES_RESOURCE = "api/Volumes/search";
 const ISSUES_RESOURCE = "api/Issues/search";
+const LOCAL_ISSUE_RESOURCE = "api/issues/local"
 
 // GET all volumes with filter, sort, pagination
 export async function getAllVolumes(filter, sort, page, pageSize) {
@@ -18,3 +19,8 @@ export async function getAllIssues(formattedFilter, sort, page, pageSize) {
 return response.data;
 };
 
+
+export const createLocalIssue = async (data) => {
+  const response = await AxiosConfig.post(LOCAL_ISSUE_RESOURCE, data)
+  return response.data
+}
