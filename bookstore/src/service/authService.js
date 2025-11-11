@@ -44,16 +44,13 @@ export async function getCurrentProfile() {
 }
 export function getUserRolesFromToken(token) {
   if (!token) return [];
-  try {
-    const base64Payload = token.split('.')[1];
-    const payload = JSON.parse(atob(base64Payload));
-    // If only one role, convert to array
-    return Array.isArray(payload?.role) ? payload.role : payload?.role ? [payload.role] : [];
-  } catch (e) {
-    console.error("Failed to parse token", e);
-    return [];
-  }
+  const payload = JSON.parse(atob(token.split('.')[1]));
+  // Use the correct claim type
+  return payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] 
+      ? [payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']] 
+      : [];
 }
+
 
 export function logout() {
   removeToken();

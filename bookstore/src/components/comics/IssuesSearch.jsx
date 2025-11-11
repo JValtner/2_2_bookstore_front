@@ -25,6 +25,10 @@ const IssuesSearch = () => {
     // Load issues whenever filter, sort, page, or pageSize changes
     useEffect(() => {
         const loadIssues = async () => {
+            if (location.state?.message) {
+                setFeedbackMsg(location.state.message);
+                setTimeout(() => setFeedbackMsg(""), 3000);
+            }
             try {
                 setLoading(true);
 
