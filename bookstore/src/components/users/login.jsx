@@ -55,9 +55,9 @@ export default function Login() {
         />
         {errors.password && <p className="error">{errors.password.message}</p>}
       </label>
-      <button onClick={handleGoogleLogin}>
+      {/* <button onClick={handleGoogleLogin}>
         Login with Google
-      </button>
+      </button> */}
 
       <button type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Signing in…" : "Sign in"}
